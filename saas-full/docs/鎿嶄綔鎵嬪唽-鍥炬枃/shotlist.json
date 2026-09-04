@@ -1,0 +1,84 @@
+{
+  "base": "http://127.0.0.1:5180",
+  "shots": [
+    {
+      "name": "00a_登录页",
+      "url": "/login",
+      "wait": 6
+    },
+    {
+      "name": "00b_系统首页",
+      "wait": 5
+    },
+    {
+      "name": "01a_用户管理_列表",
+      "url": "/platformManage/clientUser",
+      "wait": 6
+    },
+    {
+      "name": "02a_预留信息_列表",
+      "url": "/platformManage/reserveInfo",
+      "wait": 6
+    },
+    {
+      "name": "03a_匹配线索_列表",
+      "url": "/platformManage/matchClues",
+      "wait": 6
+    },
+    {
+      "name": "04a_评分线索_列表",
+      "url": "/platformManage/scoringClues",
+      "wait": 6
+    },
+    {
+      "name": "05a_园区客户_列表",
+      "url": "/enterpriseManage/memberMgSys",
+      "wait": 6
+    },
+    {
+      "name": "06a_会员线索_列表",
+      "url": "/enterpriseManage/memberCluesMg",
+      "wait": 6
+    },
+    {
+      "name": "07a_获批动态_列表",
+      "url": "/enterpriseManage/approvalDynamics",
+      "wait": 6
+    },
+    {
+      "name": "08a_导入导出_列表",
+      "url": "/importExportRoot/index",
+      "wait": 6
+    },
+    {
+      "name": "09a_榜单招商",
+      "url": "/investment/rankingList",
+      "wait": 6
+    },
+    {
+      "name": "10a_地图招商",
+      "url": "/investment/mapInvest",
+      "wait": 8
+    },
+    {
+      "name": "11a_产业链招商",
+      "url": "/investment/chainInvest",
+      "wait": 7
+    },
+    {
+      "name": "12a_客户池外呼",
+      "url": "/customer-pool",
+      "wait": 6
+    },
+    {
+      "name": "13a_园区大屏",
+      "url": "/park-screen",
+      "wait": 8
+    },
+    {
+      "name": "14a_网站配置",
+      "url": "/system/website",
+      "wait": 6
+    }
+  ]
+}

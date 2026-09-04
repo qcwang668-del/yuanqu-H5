@@ -1,0 +1,25 @@
+; 智远力企-saas supervisor 托管范本（见 CLAUDE.md §6）
+; 放到 /etc/supervisor/conf.d/智远力企-saas.conf 后：
+;   sudo supervisorctl reread && sudo supervisorctl update
+;   sudo supervisorctl status 智远力企-saas
+; 铁律：一个服务只用一种托管方式，别再手工 start.sh / nohup 拉同一个进程。
+
+[program:智远力企-saas]
+command=/bin/bash -lc 'exec python manage.py runserver 0.0.0.0:8000'   ; 换成实际启动命令
+directory=/path/to/智远力企-saas
+user=root
+autostart=true
+autorestart=true
+startsecs=5
+stopwaitsecs=10
+stdout_logfile=/var/log/智远力企-saas.out.log
+stderr_logfile=/var/log/智远力企-saas.err.log
+environment=BROWSER_HEADLESS="1"
+
+; 看门狗（可选，也交给 supervisor 托管）
+[program:智远力企-saas-watchdog]
+command=/bin/bash /path/to/智远力企-saas/ops/watchdog.sh
+autostart=true
+autorestart=true
+stdout_logfile=/var/log/智远力企-saas-watchdog.log
+stderr_logfile=/var/log/智远力企-saas-watchdog.log

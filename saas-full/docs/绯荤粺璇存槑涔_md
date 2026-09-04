@@ -1,0 +1,268 @@
+# 智远力企 SaaS（力企云 SAAS 系统）· 系统说明书
+
+> 版本：v1.0 ｜ 编制日期：2026-08-26 ｜ 状态：9 大业务模块 1:1 复刻完成 + E2E 验收全绿
+> 本说明书面向：开发、测试、运维、交付验收人员。凡与代码/配置冲突处，以仓库实际文件为准。
+
+---
+
+## 1. 系统概述
+
+### 1.1 项目定位
+智远力企 SaaS 是对已上线的 **「力企云 SAAS 系统」**（`https://admin-saas.liqicloud.com`）的 **1:1 功能复刻**。目标是以开源框架为底座，还原目标系统面向「租户管理员（tenant_admin）」的全部业务功能与交互，形成一套自主可控、可私有化部署的同款系统。
+
+### 1.2 底座与整体架构
+| 项 | 结论 |
+|---|---|
+| 底座框架 | **芋道 ruoyi-vue-pro（SaaS 多租户版）二次开发**（`revision 2026.07-jdk8-SNAPSHOT`，JDK8 / Spring Boot 2.7.18 分支）。后端 git origin = `gitee.com/zhijiantianya/ruoyi-vue-pro.git`，包名 `cn.iocoder.yudao.module.liqi` |
+| 架构风格 | 前后端分离 + 多模块 Maven 单体后端 + 多租户 SaaS |
+| 后端 | Spring Boot 2.7.18 + MyBatis-Plus（+mybatis-plus-join）+ Druid + 动态数据源 + MySQL 8 + Redis 7，统一响应 `{code, data, msg}`（`code=0` 成功） |
+| 前端 | Vue 3.5 + TypeScript + Element Plus 2.13 + Pinia 3 + Vue Router + Vite 8（`yudao-ui-admin-vue3`，pnpm 管理） |
+
+> ⚠️ 根目录 `README.md` 所写「Spring Boot 3.2 + Java 17 + `com.zhiyuanliqi.saas`」为早期占位脚手架文案，**与实际代码不符**，一切以本说明书与实际文件为准。
+| API 前缀 | `/admin-api`；本项目业务接口 `/admin-api/liqi/*` |
+| 多租户 | 是。目标勘察租户「深圳市大疆无人机应用有限公司」→ **tenant-id = 101**；本地底座默认租户「芋道源码」→ tenant-id = 1 |
+| 登录验证码 | 目标系统为 AJ-Captcha 滑块（blockPuzzle）；本地开发环境已关闭验证码 |
+
+### 1.3 复刻边界（功能范围）
+以目标系统「深圳大疆」租户 + `tenant_admin` 角色实际可见菜单为准，共 **4 个顶层目录 + 9 个业务页面**（详见第 4 章）。这 9 个页面即本项目的功能边界。
+
+---
+
+## 2. 技术栈与依赖
+
+### 2.1 后端
+- **语言/运行时**：Java 8（`/usr/lib/jvm/java-8-openjdk-amd64`）
+- **框架**：Spring Boot 2.7 + 芋道 `yudao` 全家桶（framework / system / infra 等）
+- **持久层**：MyBatis-Plus + MySQL 8.0，缓存/会话 Redis 7
+- **构建**：Maven（`revision` 统一版本管理），多模块聚合
+- **后端多模块结构**（`backend/` 下）：
+  - 框架层：`yudao-dependencies`、`yudao-framework`
+  - 底座业务模块：`yudao-module-system`（认证/租户/菜单/角色/字典）、`yudao-module-infra`（基础设施）、以及 `member/bpm/pay/mall/crm/erp/ai/...` 等芋道自带模块（未启用于本业务）
+  - **本项目业务模块：`yudao-module-liqi`**（包 `cn.iocoder.yudao.module.liqi`）—— 承载全部力企业务
+  - 启动模块：`yudao-server`（打包 `yudao-server.jar`）
+- **实际启用编译的模块仅 6 个**（`backend/pom.xml`）：`yudao-dependencies`、`yudao-framework`、`yudao-server`、`yudao-module-system`、`yudao-module-infra`、`yudao-module-liqi`。磁盘上的 crm/erp/mall/hrm/wms/mes/iot/ai/bpm/pay/mp/member 等目录**均在 pom 中注释、未参与构建**。
+- **多租户已开启**：`yudao.tenant.enable=true`，`yudao-module-liqi` 引入 `yudao-spring-boot-starter-biz-tenant`，全部 `liqi_*` 表带 `tenant_id` 字段走租户拦截自动隔离。
+- 其它组件：aj-captcha 滑块验证码、Quartz 定时任务、springdoc + knife4j 接口文档（`/swagger-ui`）、MyBatis-Plus 字段加密。
+
+### 2.2 前端
+- **框架**：Vue 3.5.34 + Element Plus 2.13.7 + Pinia 3 + Vue Router + Axios 1.16
+- **构建**：Vite 8.1.4（`yudao-ui-admin-vue3`，version `2026.07-snapshot`）
+- **业务页面目录**：`frontend/src/views/{platformManage, enterpriseManage, importExport, system/website}`
+- **API 封装**：`frontend/src/api/liqi/*`
+
+### 2.3 中间件与端口（GPU 运行环境实际值）
+| 组件 | 地址/端口 | 说明 |
+|---|---|---|
+| 后端服务 | `127.0.0.1:48080` | `yudao-server.jar --spring.profiles.active=local` |
+| 前端服务 | `0.0.0.0:5180` | Vite preview 伺服 `frontend/dist/`（预构建产物，非 dev-server） |
+| MySQL | `127.0.0.1:3316` | docker 容器 `liqi-mysql`，库 `ruoyi-vue-pro`，root/`liqisaas123`，utf8mb4 |
+| Redis | `127.0.0.1:6399` | docker 容器 `liqi-redis`，database 0 |
+| 稳定外网入口 | `http://120.79.142.141:8000/` | 卫星 socat ← GPU 反向隧道 `ssh -R 18090:localhost:5180` |
+
+> 注：以上为 GPU 服务器（`192.168.8.43`）实际运行值；`ruoyi-vue-pro` 库中已导入芋道底座 59 表 + 本项目 `liqi_*` 业务表。
+
+---
+
+## 3. 部署架构与运行环境
+
+### 3.1 运行落点：GPU 服务器（唯一真相源）
+- 本项目工作容器与 GPU 服务器 `192.168.8.43`（Ubuntu 22.04，双 RTX 5090）**挂载同一物理目录** `/home/fangnan/PycharmProjects/u667a-u8fdc-u529b-u4f01-saas`。容器内改代码 = GPU 侧即时生效，**禁止 scp/rsync 二次拷贝**。
+- 连接方式：`sshpass` 密码直连 root（凭据见 `deploy/secrets/gpu-server.env`，脚本 `scripts/gpu_ssh.sh`）。
+- 需算力/JDK/构建/跑服务的动作一律在 GPU 上执行（容器无 GPU、无完整工具链）。
+
+### 3.2 卫星服务栈（基础设施依赖）
+阿里云 ECS `120.79.142.141`（8H16G），栈目录 `/opt/qczy-poc/`：
+| 服务 | 端口 | 本项目用途 |
+|---|---|---|
+| MySQL 8 | 3306 | 卫星业务库（与 GPU 本地 3316 各司其职） |
+| Redis 7 | 6379 | 缓存/会话 |
+| MinIO | 9000/9001 | 对象存储，**独立桶 `liqi-attachments`** |
+| Nginx | 80 | 网关，对外直链 `http://120.79.142.141/liqi-attachments/<key>` |
+
+登录脚本 `scripts/poc_ssh.sh`（固定 `KexAlgorithms=diffie-hellman-group14-sha256` 绕阿里云握手坑），上传脚本 `scripts/publish_minio.sh`。
+
+### 3.3 外网访问链路
+`用户 → 卫星 120.79.142.141:8000 (socat 0.0.0.0:8000→127.0.0.1:18090) → GPU 反向隧道 (ssh -R 18090:localhost:5180) → 前端 5180 → /admin-api 代理 → 后端 48080`。守护脚本 `scripts/liqi-tunnel-keeper.sh`（GPU nohup 常驻，断线自动重连）。
+
+> 交付铁律：只有对外地址 `http://120.79.142.141:8000/` 能真实打开（HTTP 200 + 命中 `<title>力企云SAAS系统</title>` + 入口 JS 200）才算「开发完成」。
+
+---
+
+## 4. 业务功能模块
+
+顶层导航共 4 个目录 + 9 个业务页面。后端接口统一在 `/admin-api/liqi/*`，前端页面在对应 `views/` 目录。
+
+| # | 顶层目录 | 子模块 | 后端接口前缀 | 前端页面 | 数据表 |
+|---|---|---|---|---|---|
+| 1 | 平台管理 | 用户管理（clientUser） | `/liqi/app-user` | `platformManage/clientUser` | `liqi_app_user` |
+| 2 | 平台管理 | 预留信息管理 | `/liqi/reserve-info` | `platformManage/reserveInfo` | `liqi_reserve_info` |
+| 3 | 平台管理 | 匹配线索管理 | `/liqi/match-clue` | `platformManage/matchClues` | `liqi_match_clue` |
+| 4 | 平台管理 | 评分线索管理 | `/liqi/scoring-clue` | `platformManage/scoringClues` | `liqi_scoring_clue` |
+| 5 | 企业管理 | 会员管理系统 | `/liqi/member` | `enterpriseManage/memberMgSys` | `liqi_member` |
+| 6 | 企业管理 | 会员线索管理 | `/liqi/member-clue` | `enterpriseManage/memberCluesMg` | `liqi_member_clue` |
+| 7 | 企业管理 | 企业获批动态 | `/liqi/approval-dynamic` | `enterpriseManage/approvalDynamics` | `liqi_approval_dynamic` |
+| 8 | 我的导入导出 | 导入导出中心 | `/liqi/import-export` | `importExport` | `liqi_import_export_record` |
+| 9 | 系统管理 | 网站配置 | `/liqi/website-config` | `system/website` | `liqi_website_config` |
+
+### 4.1 模块要点
+
+**① 平台管理 / 用户管理（clientUser）**
+C 端/平台用户管理。列表列：用户名、手机号、来源（小程序/PC 端）、维护企业、推广用户量、一/二级推广人、注册时间、最近登录时间。含用户详情页（基本信息 + 维护企业 + 登录日志）与推广用户列表。
+
+**② 预留信息管理（reserveInfo）**：用户预留/留资信息管理。
+
+**③ 匹配线索管理（matchClue）**：线索匹配业务。
+
+**④ 评分线索管理（scoringClue）**：线索评分业务。
+
+**⑤ 会员管理系统（member）**：企业会员管理。**定制扩展「关联园区」**：新增 `liqi_park` 表（park_name/address_keyword/city/status，内置深圳湾科技园/广州天河智慧城/北京朝阳CBD），会员分页 `/liqi/member/page` 支持 `parkId` 参数，按园区 `address_keyword` 对会员 `register_address` 做 LIKE 筛选；前端会员页顶部提供「关联园区」下拉筛选。
+
+**⑥ 会员线索管理（memberClue）**：会员线索业务。
+
+**⑦ 企业获批动态（approvalDynamic）**：企业获批/审批动态。
+
+**⑧ 我的导入导出（importExport）**：导入导出记录中心，是目标系统唯一具备按钮级权限（`importExport:export/import`）的模块。
+
+**⑨ 网站配置（website-config）**：芋道 system 精简后仅保留的系统配置页。
+
+> 另有企业库支撑数据：`liqi_enterprise`（约 5000 家，注意为虚构名，天眼查查不到）+ 股东子表 `liqi_enterprise_shareholder`。企业库扩列见 `backend/sql/liqi/enterprise-enrich-schema.sql`（统一社会信用代码/工商注册号/经营状态/实缴资本/经营范围/标签/工商回填状态等）。天眼查能力已封装 `TycClient`（经蓝凌 openapi 代理），仅认工商全称/统一社会信用代码。
+
+### 4.3 定制扩展模块（1:1 复刻之外新增，前端已落地）
+除上表 9 个复刻页面外，前端另有两组扩展业务，由企业库/园区/会员等 `/admin-api/liqi/*` 接口支撑，菜单 SQL 见 `backend/sql/liqi/`：
+
+| 业务域 | 前端页面（`views/`） | 支撑接口/数据 | 菜单 SQL |
+|---|---|---|---|
+| **招商** | `investment/rankingList`（榜单招商）、`investment/mapInvest`（地图招商，Leaflet）、`investment/chainInvest`（产业链招商）、`investment/callWorkbench`（外呼工作台） | `liqi_enterprise` 企业库 + 天眼查回填 | `investment-menu.sql`、`map-invest-menu.sql`、`chain-invest-menu.sql` |
+| **园区管理** | `park/enterpriseList`（园区企业列表）、`park/screen`（可视化大屏） | `liqi_park` + `/liqi/park`、`liqi_enterprise` | `park-screen-menu.sql` |
+
+> 说明：招商/园区大屏为复刻交付后追加的定制功能，后端复用企业库（`LiqiEnterpriseController`）与园区（`LiqiParkController`）接口，未单独建独立业务包。
+
+### 4.2 菜单与权限
+- 菜单精简：仅保留「首页 / 平台管理 / 企业管理 / 我的导入导出 / 系统管理」，其余芋道顶层菜单 `system_menu.visible=0` 隐藏（系统管理下子菜单保留）。本项目新增菜单 id ≥ 2027。
+- admin 昵称定制为「王雁」。
+- 租户 1（package_id=0，系统租户）拥有全部菜单，无需改套餐；插入菜单后重新登录即生效。
+
+---
+
+## 5. 代码结构
+
+### 5.1 后端模块 `yudao-module-liqi`
+包根 `cn.iocoder.yudao.module.liqi`，共 81 个 Java 文件，按业务子包组织：
+```
+controller/admin/{appuser, reserveinfo, matchclue, scoringclue, member, memberclue,
+                  enterprise, park}/*Controller.java
+service/{appuser, reserveinfo, matchclue, scoringclue, member, memberclue,
+         enterprise, park}/                 ← Service + ServiceImpl
+dal/{dataobject, mysql}/                     ← DO 实体 + Mapper
+enums/                                        ← 枚举/错误码
+importexport/{controller, service, dal}/     ← 导入导出（独立子包）
+approval/{controller, service, dal}/         ← 企业获批动态（独立子包）
+website/{controller, service, dal}/          ← 网站配置（独立子包）
+```
+接口清单（`/admin-api/liqi/*`）：`app-user`、`reserve-info`、`match-clue`、`scoring-clue`、`member`、`member-clue`、`approval-dynamic`、`import-export`、`website-config`、`park`。
+
+### 5.2 前端
+```
+frontend/src/
+├── views/platformManage/{clientUser, reserveInfo, matchClues, scoringClues}/index.vue
+├── views/enterpriseManage/{memberMgSys, memberCluesMg, approvalDynamics}/index.vue
+├── views/importExport/index.vue
+├── views/system/website/index.vue
+├── views/investment/{rankingList, mapInvest, chainInvest, callWorkbench}/   ← 招商（扩展）
+├── views/park/{enterpriseList, screen}/                                     ← 园区管理（扩展）
+└── api/liqi/{appUser, reserveInfo, matchClue, scoringClue, member, memberClue,
+              approvalDynamic, importExport, websiteConfig, enterprise, park}  ← 接口封装
+```
+
+### 5.3 数据库表（`liqi_*`）
+业务表 9 张（DDL 见 `docs/reverse/ddl/`）：
+`liqi_app_user`、`liqi_reserve_info`、`liqi_match_clue`、`liqi_scoring_clue`、`liqi_member`、`liqi_member_clue`、`liqi_approval_dynamic`、`liqi_import_export_record`、`liqi_website_config`；扩展表 `liqi_park`、企业库 `liqi_enterprise` + 股东子表 `liqi_enterprise_shareholder`。全部 `ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`、均带 `tenant_id`。芋道基础表约 48~59 张（`backend/sql/mysql/ruoyi-vue-pro.sql` + `quartz.sql`）。
+
+---
+
+## 6. 构建、启动与运维
+
+### 6.1 后端构建/启动（在 GPU 服务器上）
+```bash
+# 编译单模块查错
+JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 mvn -o -pl yudao-module-liqi compile
+# 重建 server jar（关键坑：必须先删旧 jar，否则 Maven 秒“成功”却不重打新模块）
+rm -f backend/yudao-server/target/yudao-server.jar*
+JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 mvn -o -pl yudao-server package
+unzip -l backend/yudao-server/target/yudao-server.jar | grep 你的新类   # 验证已打进
+# 启动（端口 48080，日志 /tmp/liqi-server.log，约 8s 起来）
+java -jar backend/yudao-server/target/yudao-server.jar --spring.profiles.active=local
+```
+
+### 6.2 前端构建/启动（在 GPU 服务器上）
+> 5180 端口是 `vite preview` 伺服 `dist/`，**改 .vue 源码不会 HMR，必须重构建**：
+```bash
+cd frontend && node --max_old_space_size=8192 ./node_modules/vite/bin/vite.js build --mode env.local
+# preview 静态伺服会即时读到新 dist，无需重启
+```
+前端联通配置：`.env.local` 设 `VITE_BASE_URL=''`（走相对 `/admin-api`）+ 关 `VITE_APP_API_ENCRYPT_ENABLE`；`vite.config.ts` 启用 proxy `/admin-api→127.0.0.1:48080` + `allowedHosts:true`。
+
+### 6.3 数据库导入注意（编码坑）
+含中文的 SQL 导入必须显式指定字符集，否则双重 UTF-8 乱码：
+```bash
+docker exec -i liqi-mysql mysql --default-character-set=utf8mb4 -uroot -pliqisaas123 ruoyi-vue-pro < x.sql
+```
+
+### 6.4 运维规范（详见 CLAUDE.md）
+- **进程托管单一化**：常驻服务由 supervisor / systemd 统一托管，本地开发用 `scripts/start.sh`（flock 互斥 + 先杀后启）；禁止多方式混用互杀。
+- **精确端口清理**：`lsof -ti tcp:<本项目端口>` 定点 kill，严禁 `pkill -f java/node/cpolar` 宽匹配一锅端。
+- **看门狗分家**：业务健康看门狗（§7）只探本机回环 `/healthz`；cpolar/隧道看门狗（§9）只探隧道；互不越界。
+- **单一事实源文件加锁**：并发改清单/台账/push-log 走 `拿锁→读盘→改→写→解锁`（`scripts/lib/agent-lock.sh`）。
+
+---
+
+## 7. 测试与验收
+
+### 7.1 E2E 验收三件套（强制）
+所有成果须通过 Playwright 端到端测试验收，产物齐全（`e2e/` 目录）：
+| 产物 | 路径 |
+|---|---|
+| 测试用例 | `e2e/tests/<feature>.spec.ts` |
+| 截图证据 | `e2e/evidence/<feature>/`（≥3 张关键步骤图） |
+| HTML 报告 | `e2e/reports/<feature>.html`（全绿） |
+
+运行：`cd e2e && npm install && npx playwright test`。
+
+### 7.2 部署后逐张识图（铁律）
+任何部署/改动后必须真实浏览器登录逐页截图，**逐张识别**确认是「正常渲染的成功页面」，严禁把 loading/骨架屏/空白/报错页当成功。
+
+### 7.3 测试账号
+- 本地芋道底座默认租户：`admin` / `admin123`（tenant-id=1，验证码已关）。
+- 同栈默认业务账号：`18888888888` / `Qc@123456`（如与本项目实际不一致，以实际为准）。
+- 目标系统勘察账号（仅参考）：`test001` / `qc123456`（昵称王雁，tenant_admin，tenant-id=101）。
+
+---
+
+## 8. 关键约束与已知坑
+
+1. **同一挂载唯一真相源**：容器 = GPU 同一目录，禁止二次拷贝文件。
+2. **重建 jar 必须先删旧 jar**，否则新模块打不进去（`unzip -l` 验证）。
+3. **前端改源码必须重 build**（preview 只伺服 dist）。
+4. **中文 SQL 导入加 `--default-character-set=utf8mb4`**。
+5. **交付以外网地址真实可达为准**（HTTP 200 + 真应用 + 入口 JS）。
+6. **免费隧道不可用于给用户看**（loca.lt/pinggy 对静态资源返回反滥用拦截页导致白屏；cloudflared 本环境 DNS/UDP 受限）。
+7. **`liqi_enterprise` 为虚构企业名**，天眼查查不到；天眼查仅认工商全称/统一社会信用代码。
+8. **扫码登录需人工介入**：遇 QR 登录先发钉钉通知再停下等待用户扫码。
+
+---
+
+## 9. 附录：相关文档与入口
+
+| 内容 | 位置 |
+|---|---|
+| 开发总纲/强制规范 | `CLAUDE.md`（含钉钉推送 §3/§5、进程管理 §6、看门狗 §7、GPU 直连 §16 等） |
+| 逆向勘察·模块清单 | `docs/reverse/01-module-inventory.md` |
+| 逆向勘察·接口全量 | `docs/reverse/02-all-apis.txt` |
+| 模块①复刻蓝图 | `docs/reverse/03-module-01-clientUser.md` |
+| 表结构 DDL | `docs/reverse/ddl/*.sql` |
+| 菜单 SQL | `docs/reverse/menu/*.sql` |
+| 卫星服务栈说明 | `deploy/README.md` |
+| 钉钉绑定台账 | `docs/ops/dingtalk-bindings.json` |
+| 稳定外网入口 | `http://120.79.142.141:8000/` |
+</content>
+</invoke>

@@ -1,0 +1,20 @@
+{
+  "module_name": "力企云SAAS系统",
+  "md_file": "力企云SAAS系统操作手册.md",
+  "out_basename": "力企云SAAS系统操作手册",
+  "img_dir": ".",
+  "title": "力企云 SAAS 系统 · 图文操作手册",
+  "preset": "generic",
+  "requirements_doc": "../系统说明书.md",
+  "login": {
+    "base": "http://127.0.0.1:5180",
+    "tenant": "芋道源码",
+    "username": "admin",
+    "password": "admin123"
+  },
+  "upload": {
+    "enabled": false,
+    "base": "http://120.79.142.141/liqi-attachments",
+    "fixed_name": "liqi-manual"
+  }
+}

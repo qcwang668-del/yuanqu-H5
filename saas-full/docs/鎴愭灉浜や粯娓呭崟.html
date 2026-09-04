@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>智远力企 SaaS · 成果交付清单</title>
+<style>
+  :root{--brand:#2f6fe0;--ink:#1f2d3d;--sub:#6b7a90;--line:#e9edf3;--bg:#f4f6fb;--ok:#2fa36b;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;padding:0 0 60px}
+  .hero{background:linear-gradient(135deg,#1c6bd0,#0c4693);color:#fff;padding:40px 24px 34px}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+  .hero h1{font-size:26px;font-weight:700}
+  .hero .sub{opacity:.9;margin-top:8px;font-size:14px}
+  .hero .meta{margin-top:16px;display:flex;flex-wrap:wrap;gap:10px}
+  .chip{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:5px 14px;font-size:13px}
+  .chip a{color:#fff;text-decoration:none;border-bottom:1px dashed rgba(255,255,255,.6)}
+  section{margin-top:26px}
+  .sec-hd{display:flex;align-items:center;font-size:18px;font-weight:700;margin:0 0 14px}
+  .sec-hd .bar{width:4px;height:18px;background:var(--brand);border-radius:2px;margin-right:10px}
+  .sec-hd .n{color:var(--brand);margin-right:8px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 20px;box-shadow:0 2px 10px rgba(20,50,90,.04)}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  td,th{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+  th{color:var(--sub);font-weight:600;width:200px;white-space:nowrap}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+  .mod{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .mod h3{font-size:15px;color:var(--brand);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  .mod ul{list-style:none}
+  .mod li{font-size:13.5px;color:#3a4657;padding:3px 0 3px 18px;position:relative}
+  .mod li::before{content:"✓";color:var(--ok);position:absolute;left:0;font-weight:700}
+  .tag{display:inline-block;font-size:12px;background:#eef4ff;color:var(--brand);border-radius:4px;padding:1px 8px;margin-left:6px}
+  a.link{color:var(--brand);text-decoration:none}a.link:hover{text-decoration:underline}
+  .stat{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+  .stat .b{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;border-left:3px solid var(--brand)}
+  .stat .num{font-size:24px;font-weight:800;color:var(--brand)}
+  .stat .lb{font-size:13px;color:var(--sub);margin-top:2px}
+  .foot{margin-top:30px;text-align:center;color:#9aa4b2;font-size:12px}
+  .muted{color:var(--sub);font-size:13px}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="wrap">
+    <h1>智远力企 SaaS · 成果交付清单</h1>
+    <div class="sub">招商获客一体化平台 — 三大招商入口 · AI 外呼客户池 · CRM 闭环 · 企业详情 + 天眼查实时回写</div>
+    <div class="meta">
+      <span class="chip">🖥️ 系统：<a href="http://120.79.142.141:8000/" target="_blank">120.79.142.141:8000</a></span>
+      <span class="chip">👤 芋道源码 / admin / admin123</span>
+      <span class="chip">🗓️ 汇总日期：2026-08-27</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section>
+    <div class="stat">
+      <div class="b"><div class="num">3</div><div class="lb">招商入口(榜单/产业链/地图)</div></div>
+      <div class="b"><div class="num">16</div><div class="lb">企业库表(含 5 张子表)</div></div>
+      <div class="b"><div class="num">15+</div><div class="lb">E2E 用例(截图+报告)</div></div>
+      <div class="b"><div class="num">16</div><div class="lb">天眼查回写工商字段</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-hd"><span class="bar"></span><span class="n">01</span>系统访问 &amp; 环境</div>
+    <div class="card">
+      <table>
+        <tr><th>对外系统地址</th><td><a class="link" href="http://120.79.142.141:8000/" target="_blank">http://120.79.142.141:8000/</a>（标题「力企云SAAS系统」，HTTP 200）</td></tr>
+        <tr><th>测试账号</th><td>租户「芋道源码」 / admin / admin123</td></tr>
+        <tr><th>前端</th><td>yudao Vue3 + Element Plus（GPU :5180，vite preview 生产产物）</td></tr>
+        <tr><th>后端</th><td>yudao Java（:48080，/admin-api），yudao-module-liqi 业务模块</td></tr>
+        <tr><th>数据库</th><td>MySQL 库 <code>ruoyi-vue-pro</code></td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-hd"><span class="bar"></span><span class="n">02</span>功能模块交付物</div>
+    <div class="grid">
+      <div class="mod"><h3>🎯 智慧招商三入口</h3><ul>
+        <li>榜单招商：政府/平台/商业榜单目录 + 收藏</li>
+        <li>地图招商：Leaflet 圈选 + 多维筛选 + 详情列</li>
+        <li>产业链招商：产业图谱 + 条件组合筛选</li>
+        <li>统一「圈选企业 → 加入待联系」</li>
+      </ul></div>
+      <div class="mod"><h3>📞 客户池管理<span class="tag">一级菜单</span></h3><ul>
+        <li>待联系池 · 一企多号逐个可拨</li>
+        <li>一键 AI 外呼 + 批量外呼</li>
+        <li>拨号弹窗：拨号→通话 AI 话术字幕→挂断→小结</li>
+        <li>意向分级 A/B/C · 转化漏斗</li>
+        <li>一键推 CRM 生成跟进线索(闭环)</li>
+      </ul></div>
+      <div class="mod"><h3>🏢 园区客户管理</h3><ul>
+        <li>去负责人字段，加 补贴金额/已申报项目/参保人数</li>
+        <li>参保人数真实值(企业库回填) + 分档筛选</li>
+        <li>企业名称可点开详情</li>
+      </ul></div>
+      <div class="mod"><h3>📋 企业详情(全局通用)</h3><ul>
+        <li>8 页签抽屉：基本/联系/项目申报/人员/知产/经营/风险/发展</li>
+        <li>项目申报页：概况双图表 + 项目卡片 + 备注 + 更新时间</li>
+        <li>企业名称全系统可点(6 处入口)</li>
+      </ul></div>
+      <div class="mod"><h3>🔎 天眼查实时回写<span class="tag">真实数据</span></h3><ul>
+        <li>点「刷新工商数据」→ 实时调天眼查(蓝凌代理)</li>
+        <li>回写企业库 16 工商字段 + 股东子表</li>
+        <li>缓存+按需刷新(省配额)，快意电梯已验证</li>
+      </ul></div>
+      <div class="mod"><h3>🧩 其它模块</h3><ul>
+        <li>园区可视化大屏</li>
+        <li>企业获批动态 / 会员线索管理</li>
+        <li>导入导出记录 / 平台管理 / 系统管理</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-hd"><span class="bar"></span><span class="n">03</span>技术交付物</div>
+    <div class="card">
+      <table>
+        <tr><th>前端新增</th><td><code>store/modules/callList.ts</code>（待联系池，localStorage 持久化）、<code>views/investment/callWorkbench/</code>（工作台 + 拨号弹窗 + mock）、<code>EnterpriseDrawer.vue</code>（企业详情抽屉）、各入口接线</td></tr>
+        <tr><th>后端新增</th><td><code>TycClient.java</code>（天眼查·蓝凌代理，只读）、<code>/liqi/enterprise/get|enrich</code> 端点、企业/股东 DO + Mapper + Service</td></tr>
+        <tr><th>数据库</th><td><code>liqi_enterprise</code> 扩 16 列 + <code>enrich_status/enrich_time</code>；新增子表 5 张（股东 / 联系方式 / 知产 / 风险 / 项目）；<code>liqi_*</code> 共 16 张表</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-hd"><span class="bar"></span><span class="n">04</span>质量交付物 · E2E</div>
+    <div class="card">
+      <p class="muted">Playwright 端到端测试，真实浏览器逐页截图 + HTML 报告。本轮核心新增用例：</p>
+      <table>
+        <tr><th>圈选→外呼→CRM 全链路</th><td><code>investment-call-workbench.spec.ts</code> ✓ 通过</td></tr>
+        <tr><th>园区客户管理字段/筛选</th><td><code>park-customer-mgmt.spec.ts</code> ✓ 通过</td></tr>
+        <tr><th>企业详情/地图详情列</th><td><code>enterprise-detail.spec.ts</code> ✓ 通过</td></tr>
+        <tr><th>天眼查真实回写</th><td><code>enterprise-enrich-tyc.spec.ts</code> ✓ 通过</td></tr>
+        <tr><th>证据 &amp; 报告</th><td>截图 14 目录（<code>e2e/evidence/</code>）+ HTML 报告（<code>e2e/reports/</code>）</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-hd"><span class="bar"></span><span class="n">05</span>文档交付物（已托管）</div>
+    <div class="card">
+      <table>
+        <tr><th>📘 系统说明书 v1.0</th><td><a class="link" href="http://120.79.142.141/liqi-attachments/docs/system-manual-v1.html" target="_blank">打开</a></td></tr>
+        <tr><th>📗 图文操作手册 v1.0</th><td><a class="link" href="http://120.79.142.141/liqi-attachments/docs/liqi-manual.html" target="_blank">打开</a></td></tr>
+        <tr><th>🎬 力企云说明视频 v1.0</th><td><a class="link" href="http://120.79.142.141/liqi-attachments/reports/liqi-demo-video-20260826.html" target="_blank">打开</a></td></tr>
+        <tr><th>📄 上线报告</th><td>大屏 / 榜单招商 / 地图招商 / 产业链招商（各有独立链接）</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <div class="foot">智远力企 SaaS · 成果交付清单 · 本页由 AI 汇总生成，仅作交付留痕</div>
+</div>
+</body>
+</html>

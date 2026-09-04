@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>智能体广场 · 上线验收报告 · 智远力企 SaaS</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; background: #f4f6fa; color: #2c3e50; line-height: 1.7; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 32px 20px 60px; }
+  .hero { background: linear-gradient(135deg, #1d4ed8, #0ea5e9); color: #fff; border-radius: 16px; padding: 36px 32px; box-shadow: 0 8px 24px rgba(29,78,216,.25); }
+  .hero h1 { font-size: 26px; margin-bottom: 8px; }
+  .hero p { opacity: .92; font-size: 15px; }
+  .hero .meta { margin-top: 16px; font-size: 13px; opacity: .85; }
+  .badge { display: inline-block; background: rgba(255,255,255,.2); border-radius: 20px; padding: 3px 12px; font-size: 12px; margin-right: 8px; margin-top: 8px; }
+  .card { background: #fff; border-radius: 14px; padding: 26px 28px; margin-top: 22px; box-shadow: 0 2px 10px rgba(0,0,0,.05); }
+  .card h2 { font-size: 19px; margin-bottom: 16px; padding-left: 12px; border-left: 4px solid #1d4ed8; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #eef1f6; vertical-align: top; }
+  th { background: #f8fafc; color: #475569; font-weight: 600; }
+  .ok { color: #16a34a; font-weight: 600; }
+  .warn { color: #d97706; font-weight: 600; }
+  .pill { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+  .pill.g { background: #dcfce7; color: #15803d; }
+  .pill.y { background: #fef3c7; color: #b45309; }
+  ul { padding-left: 22px; font-size: 14px; }
+  li { margin: 6px 0; }
+  code { background: #f1f5f9; padding: 2px 7px; border-radius: 5px; font-size: 13px; color: #be185d; }
+  .arch { background: #0f172a; color: #e2e8f0; border-radius: 10px; padding: 18px 20px; font-family: "SFMono-Regular", Consolas, monospace; font-size: 12.5px; line-height: 1.9; overflow-x: auto; }
+  .arch .hl { color: #7dd3fc; }
+  .btn { display: inline-block; background: #1d4ed8; color: #fff; text-decoration: none; padding: 11px 26px; border-radius: 9px; font-weight: 600; margin-right: 12px; margin-top: 8px; }
+  .btn.ghost { background: #fff; color: #1d4ed8; border: 1.5px solid #1d4ed8; }
+  .foot { text-align: center; color: #94a3b8; font-size: 12px; margin-top: 30px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <h1>🤖 智能体广场 · 上线验收报告</h1>
+    <p>智远力企 SaaS 后台新增「智能体广场」菜单，内置多个 AI 智能体，支持流式对话与 MCP 工具调用。</p>
+    <div>
+      <span class="badge">多智能体对话</span>
+      <span class="badge">工商 MCP 工具</span>
+      <span class="badge">火山方舟大模型</span>
+      <span class="badge">SSE 流式</span>
+    </div>
+    <div class="meta">交付日期：2026-09-01 ｜ 底座：芋道 yudao（JDK8）二开 ｜ 模块：yudao-module-liqi · agent</div>
+  </div>
+
+  <div class="card">
+    <h2>一、功能交付</h2>
+    <table>
+      <tr><th>智能体</th><th>能力</th><th>数据来源</th><th>状态</th></tr>
+      <tr>
+        <td><b>工商信息智能体</b></td>
+        <td>法定代表人、注册资本、成立日期、经营状态、统一信用代码、股东、对外投资、分支机构、主要人员、股权出质等</td>
+        <td>工商「企业信息洞察」MCP（7 个工具，function calling 自动调用）</td>
+        <td><span class="pill g">对话已通</span><br><span class="pill y">MCP 密钥待更新</span></td>
+      </tr>
+      <tr>
+        <td><b>企业司法风险智能体</b></td>
+        <td>涉诉/裁判文书、被执行人、失信被执行人、开庭公告、股权冻结等风险维度咨询</td>
+        <td>大模型专业知识（司法 MCP 后续接入，已预留绑定位）</td>
+        <td><span class="pill g">已上线·咨询占位</span></td>
+      </tr>
+    </table>
+    <ul style="margin-top:14px">
+      <li>一级菜单「智能体广场」：广场卡片页 + 对话页（会话列表、流式打字机、Markdown 渲染、工具调用过程展示、新建/切换会话）。</li>
+      <li>工具调用证据留痕：每次 MCP 调用的工具名、入参、返回摘要落库 <code>liqi_agent_message.tool_calls</code>。</li>
+      <li>容错降级：外部工具不可用时模型如实说明、不编造数据，并给出权威查询渠道。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>二、技术架构</h2>
+    <p style="font-size:14px;margin-bottom:12px">因底座为 JDK8 / Spring Boot 2.7，与 spring-ai（需 JDK17/SB3）不兼容，采用<b>路线①：在 yudao-module-liqi 内自建轻量对话 + MCP 客户端</b>，零侵入底座。</p>
+    <div class="arch">
+前端 智能体广场页(Vue3) <span class="hl">─SSE─▶</span> 后端 liqi.agent<br>
+&nbsp;&nbsp;├─ <span class="hl">LlmChatClient</span>：火山方舟 ark-code-latest（OpenAI 兼容 /chat/completions，流式 + function calling）<br>
+&nbsp;&nbsp;├─ <span class="hl">McpToolClient</span>：标准 MCP（Streamable HTTP / JSON-RPC，Bearer 认证，JDK HttpURLConnection）<br>
+&nbsp;&nbsp;└─ 编排：模型 tool_calls → 调工商 MCP 取数 → 结果回填 → 生成中文回答<br>
+存储：liqi_agent / liqi_agent_conversation / liqi_agent_message<br>
+部署：后端 systemd(liqi-server) 托管 · 前端 liqi-nginx(5180) · socat 8000→5180
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>三、验收结论（E2E + 外网可达）</h2>
+    <table>
+      <tr><th>验收项</th><th>结果</th></tr>
+      <tr><td>菜单「智能体广场」中文显示（此前乱码已修复）</td><td class="ok">✅ 正常</td></tr>
+      <tr><td>广场 2 张智能体卡片</td><td class="ok">✅ 工商[已接工具] / 司法[咨询]</td></tr>
+      <tr><td>司法智能体流式中文回答（2 次实测）</td><td class="ok">✅ 风险 10 维度框架、被执行人 vs 失信对比表</td></tr>
+      <tr><td>工商智能体（MCP 密钥失效时）</td><td class="ok">✅ 中文优雅降级、无英文报错、不编造数据</td></tr>
+      <tr><td>工商 MCP 全链路（19:13 密钥有效时实测）</td><td class="ok">✅ 曾取到大疆真实工商数据（法人罗镇华/注册资本30亿）</td></tr>
+      <tr><td>会话列表 / 新建会话</td><td class="ok">✅ 正常</td></tr>
+      <tr><td>外网入口 http://120.79.142.141:8000/</td><td class="ok">✅ 首页/入口JS/admin-api 均 200，真应用</td></tr>
+      <tr><td>后端托管</td><td class="ok">✅ systemd 开机自启 + 崩溃自愈，凭据自动注入</td></tr>
+    </table>
+    <p style="font-size:13px;margin-top:12px">截图证据：<code>e2e/evidence/agent-square/</code>（v2_01 广场卡片、v2_02/03 司法对话、v2_04 工商降级、v2_05 新会话，共 5 张逐张识图确认）。</p>
+  </div>
+
+  <div class="card">
+    <h2>四、待办与后续</h2>
+    <ul>
+      <li><span class="warn">⚠️ 工商 MCP 密钥已被提供方停用（返回 401「密钥无效或已停用」）</span>：集成代码已就绪，<b>更新有效 MCP 密钥到 <code>/root/.liqi-agent.env</code> 的 <code>LIQI_MCP_TOKEN</code> 并重启</b>，工商智能体即恢复真实取数，无需改代码。</li>
+      <li>司法智能体：当前为咨询占位，后续提供司法 MCP 地址 + 密钥后，在 <code>liqi_agent</code> 表置 <code>mcp_enabled=1</code> 并填 <code>mcp_url</code> 即可接入（表结构/前端已预留）。</li>
+    </ul>
+  </div>
+
+  <div class="card" style="text-align:center">
+    <h2 style="border:none;padding:0">立即体验</h2>
+    <p style="margin:10px 0 6px;font-size:14px;color:#64748b">账号 admin / admin123，登录后左侧菜单「智能体广场」</p>
+    <a class="btn" href="http://120.79.142.141:8000/">🖥️ 访问系统</a>
+  </div>
+
+  <div class="foot">智远力企 SaaS · AI 自动生成 · 2026-09-01</div>
+</div>
+</body>
+</html>

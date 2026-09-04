@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>力企云 · 惠企政策二期 6 项功能上线验收</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#f4f6fa;color:#1a2233;line-height:1.7;padding:24px;}
+  .wrap{max-width:960px;margin:0 auto;}
+  .hero{background:linear-gradient(135deg,#0066ff,#0099ff 60%,#33b5ff);color:#fff;border-radius:16px;padding:34px 36px;box-shadow:0 8px 28px rgba(0,90,200,.22);}
+  .hero h1{font-size:26px;margin-bottom:10px;}
+  .hero p{opacity:.95;font-size:15px;}
+  .hero .meta{margin-top:16px;font-size:13px;opacity:.9;display:flex;gap:20px;flex-wrap:wrap;}
+  .badge{display:inline-block;background:rgba(255,255,255,.22);border-radius:20px;padding:3px 12px;font-size:12px;margin-right:6px;}
+  section{background:#fff;border-radius:14px;padding:26px 30px;margin-top:20px;box-shadow:0 2px 12px rgba(20,50,120,.06);}
+  h2{font-size:19px;margin-bottom:16px;padding-left:12px;border-left:4px solid #0066ff;}
+  table{width:100%;border-collapse:collapse;font-size:14px;}
+  th,td{padding:11px 12px;text-align:left;border-bottom:1px solid #eef1f6;vertical-align:top;}
+  th{background:#f7f9fd;color:#5a6b85;font-weight:600;white-space:nowrap;}
+  .tag{display:inline-block;border-radius:6px;padding:2px 9px;font-size:12px;font-weight:600;white-space:nowrap;}
+  .t-be{background:#e8f3ff;color:#0066ff;}
+  .t-ad{background:#e9f9ef;color:#0a9d55;}
+  .t-h5{background:#fff2e6;color:#e8720a;}
+  .ok{color:#0a9d55;font-weight:700;}
+  .stat{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:6px;}
+  .card{background:#f7f9fd;border-radius:12px;padding:18px;text-align:center;}
+  .card .num{font-size:28px;font-weight:800;color:#0066ff;}
+  .card .lb{font-size:13px;color:#7a8699;margin-top:4px;}
+  .shots{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px;}
+  .shot{border:1px solid #eef1f6;border-radius:10px;overflow:hidden;background:#fff;}
+  .shot img{width:100%;display:block;}
+  .shot .cap{font-size:12px;padding:7px 10px;color:#5a6b85;background:#f7f9fd;text-align:center;}
+  ul{padding-left:20px;font-size:14px;}
+  li{margin-bottom:7px;}
+  .entry a{display:inline-block;background:#0066ff;color:#fff;text-decoration:none;padding:10px 20px;border-radius:8px;font-size:14px;margin-right:12px;margin-top:6px;}
+  .entry a.ghost{background:#fff;color:#0066ff;border:1.5px solid #0066ff;}
+  .note{background:#fff8e6;border-left:4px solid #f5a623;border-radius:8px;padding:12px 16px;font-size:13px;color:#7a5b10;margin-top:12px;}
+  code{background:#eef3fb;padding:1px 6px;border-radius:4px;font-size:12px;color:#0066ff;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <h1>力企云 SaaS · 惠企政策二期 6 项功能上线验收</h1>
+    <p>围绕深投控/园区惠企服务真实需求，打通「园区发政策 → 企业查补贴 → AI 读懂答问 → 申报留资 → 后台跟进 → 精准推送 → 直播大讲堂」全链路。</p>
+    <div class="meta">
+      <span>🗓 2026-09-01</span><span>🖥 测试环境 120.79.142.141:8000</span><span>✅ 后端编译通过 · E2E 全绿</span>
+    </div>
+  </div>
+
+  <section>
+    <h2>一、本期交付概览</h2>
+    <div class="stat">
+      <div class="card"><div class="num">6</div><div class="lb">新增业务功能</div></div>
+      <div class="card"><div class="num">3</div><div class="lb">新增数据表</div></div>
+      <div class="card"><div class="num">13</div><div class="lb">E2E 截图（H5 9 + 后台 4）</div></div>
+      <div class="card"><div class="num">2</div><div class="lb">端（管理后台 + H5）</div></div>
+    </div>
+    <div class="note">AI「帮我读懂」实测生成 <b>2073 字</b>大白话解读、AI 政策助手问答 <b>711 字</b>，均为真实大模型（火山方舟）生成；H5 游客提交申报 → 管理后台申报线索名单 <b>闭环实测打通</b>。</div>
+  </section>
+
+  <section>
+    <h2>二、功能清单与验收</h2>
+    <table>
+      <tr><th>需求</th><th>能力</th><th>端</th><th>状态</th></tr>
+      <tr>
+        <td><b>② 园区政策发布</b></td>
+        <td>新增政策库 <code>liqi_policy</code>，园区/协会在后台自助发布政策、上下架、可见范围；H5「园区发布」专区接真实数据；政策流自动合并「政府外部政策 + 园区库政策」。</td>
+        <td><span class="tag t-ad">管理后台</span><span class="tag t-h5">H5</span></td>
+        <td class="ok">✓ 已验收</td>
+      </tr>
+      <tr>
+        <td><b>③ 企业名查补贴</b></td>
+        <td>H5 新增「绑定我的企业」页：输企业名/信用代码 → 工商信息确认 → 绑定生成画像快照；智能匹配基于真实画像匹配可领补贴，未绑定引导绑定。</td>
+        <td><span class="tag t-h5">H5</span></td>
+        <td class="ok">✓ 已验收</td>
+      </tr>
+      <tr>
+        <td><b>④ 申报线索后台</b></td>
+        <td>H5「我要申报/电话留资」名单进 SaaS 后台：分页筛选、详情、状态流转（待联系/已联系/已完成）、跟进人分配、跟进记录按时间追加、导出 Excel。</td>
+        <td><span class="tag t-ad">管理后台</span><span class="tag t-h5">H5</span></td>
+        <td class="ok">✓ 闭环实测</td>
+      </tr>
+      <tr>
+        <td><b>⑤ H5 AI 政策助手</b></td>
+        <td>复用智能体广场真实大模型：政策详情「帮我读懂（说人话）」+ 独立 AI 助手对话页（SSE 流式），7×24 政策问答、申报指引。</td>
+        <td><span class="tag t-h5">H5</span></td>
+        <td class="ok">✓ 已验收</td>
+      </tr>
+      <tr>
+        <td><b>⑥ 政策找人推送</b></td>
+        <td>新增站内信 <code>liqi_user_message</code>：每日 9 点定时按「企业画像 + 订阅偏好」自动匹配新政策推送（去重）；运营后台可定向推一条政策给画像匹配/全部会员；H5 消息页真实数据 + 未读红点。</td>
+        <td><span class="tag t-be">后端Job</span><span class="tag t-ad">管理后台</span><span class="tag t-h5">H5</span></td>
+        <td class="ok">✓ 已验收</td>
+      </tr>
+      <tr>
+        <td><b>⑫ 专家直播大讲堂</b></td>
+        <td>新增直播表 <code>liqi_live</code>：后台排期管理（预告/直播中/回放/下架）、第三方直播与回放链接；H5 直播页展示预告预约、进入直播间、观看回放。</td>
+        <td><span class="tag t-ad">管理后台</span><span class="tag t-h5">H5</span></td>
+        <td class="ok">✓ 已验收</td>
+      </tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>三、技术实现要点</h2>
+    <ul>
+      <li><b>数据层</b>：新增 <code>liqi_policy</code>（园区政策库）、<code>liqi_live</code>（直播）、<code>liqi_user_message</code>（站内消息）3 表；<code>liqi_policy_apply</code> 扩展跟进人/跟进记录/跟进时间 3 列；新增「惠企运营」一级菜单（2090）含 4 个子页。</li>
+      <li><b>政策双源合并</b>：政府政策仍走外部 <code>PolicyProvider</code>（Mock，待真实接口），园区政策走本地库；C 端列表/详情/匹配自动合并两源，园区政策对外 ID 以 <code>L</code> 前缀区分。</li>
+      <li><b>AI 复用</b>：H5 AI 助手与「帮我读懂」直接复用已上线的火山方舟 LLM 客户端（OpenAI 兼容），不重复造轮子。</li>
+      <li><b>多租户</b>：推送定时任务按租户上下文逐租户匹配落库；示例数据租户与 H5/后台租户对齐。</li>
+      <li><b>零构建 H5</b>：H5 为原生单页（app.js/style.css），改完经共享挂载即时生效，无需构建。</li>
+      <li><b>修复 2 个实测 Bug</b>：① LocalDateTime 时间戳导致直播/消息页渲染失败 → H5 加时间格式化；② LocalDate 序列化为数组导致后台日期显示异常 → 加 <code>@JsonFormat</code>。</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>四、E2E 验收截图（节选）</h2>
+    <p style="font-size:13px;color:#7a8699;margin-bottom:12px">Playwright 真实浏览器逐页截图并识图确认，均为正常渲染成功页（非 loading/空白/报错）。</p>
+    <div class="shots">
+      <div class="shot"><img src="https://120.79.142.141:8000/liqi-attachments/reports/liqi-phase2/02_h5_park_policies.png" alt="园区发布"><div class="cap">H5 园区发布（真实库数据）</div></div>
+      <div class="shot"><img src="https://120.79.142.141:8000/liqi-attachments/reports/liqi-phase2/04_h5_ai_explain.png" alt="AI帮我读懂"><div class="cap">AI 帮我读懂（2073 字）</div></div>
+      <div class="shot"><img src="https://120.79.142.141:8000/liqi-attachments/reports/liqi-phase2/05_h5_live.png" alt="直播"><div class="cap">H5 直播大讲堂</div></div>
+      <div class="shot"><img src="https://120.79.142.141:8000/liqi-attachments/reports/liqi-phase2/06_h5_ai_chat.png" alt="AI问答"><div class="cap">H5 AI 政策助手问答</div></div>
+      <div class="shot"><img src="https://120.79.142.141:8000/liqi-attachments/reports/liqi-phase2/10_admin_policy_publish.png" alt="后台政策发布"><div class="cap">后台·园区政策发布</div></div>
+      <div class="shot"><img src="https://120.79.142.141:8000/liqi-attachments/reports/liqi-phase2/11_admin_policy_apply.png" alt="申报线索"><div class="cap">后台·申报线索（闭环）</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>五、系统入口</h2>
+    <div class="entry">
+      <a href="http://120.79.142.141:8000/h5/" target="_blank">📱 打开 H5 惠企政策端</a>
+      <a class="ghost" href="http://120.79.142.141:8000/" target="_blank">🖥 打开管理后台</a>
+    </div>
+    <div class="note">后台演示账号：admin / admin123（租户「芋道源码」）；新功能位于左侧菜单「惠企运营」。H5 入口：首页九宫格含「AI政策助手 / 直播大讲堂 / 绑定我的企业」。</div>
+  </section>
+</div>
+</body>
+</html>

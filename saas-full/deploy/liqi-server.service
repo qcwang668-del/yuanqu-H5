@@ -1,0 +1,17 @@
+[Unit]
+Description=智远力企 SaaS 后端 (yudao-server, 含智能体广场)
+After=network.target docker.service liqi-mysql.service
+
+[Service]
+Type=simple
+# run.sh 内：加载 /root/.liqi-agent.env 凭据 -> pkill 旧 yudao -> exec java
+ExecStart=/home/fangnan/PycharmProjects/u667a-u8fdc-u529b-u4f01-saas/deploy/liqi-server-run.sh
+Restart=always
+RestartSec=10
+# 限内存，防 OOM 误伤同机邻居（§6/§16 铁律）
+MemoryMax=1800M
+StandardOutput=append:/home/fangnan/PycharmProjects/u667a-u8fdc-u529b-u4f01-saas/backend/liqi-server.log
+StandardError=append:/home/fangnan/PycharmProjects/u667a-u8fdc-u529b-u4f01-saas/backend/liqi-server.log
+
+[Install]
+WantedBy=multi-user.target

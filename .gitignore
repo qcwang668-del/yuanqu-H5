@@ -1,0 +1,62 @@
+# ===== 运行时产物 =====
+_logs/
+*.log
+
+# ===== 下载的源码包与备份 =====
+*.tar.gz
+*.gz
+*.zip
+_db-backup-*.sql
+*.bak
+
+# ===== 依赖缓存（旧 uni-app 工程） =====
+node_modules/
+.pnpm-store/
+.cache/
+dist/
+unpackage/
+.vite/
+
+# ===== 后端构建产物（saas-full / liqi-saas.v2 通用） =====
+target/
+build/
+out/
+*.class
+*.jar
+*.war
+*.ear
+
+# ===== 旧部署目录（本仓库保留新版 h5-huiqi 与 saas-full 源码） =====
+liqi-h5-huiqi/
+
+# ===== e2e 测试视频与截图证据 =====
+**/e2e/demo-video/
+**/e2e/reports/
+
+# ===== IDE =====
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ===== 系统 =====
+Thumbs.db
+desktop.ini
+*.tmp
+
+# ===== 芋道框架自带的多数据库方言脚本 =====
+# 本项目仅用 MySQL 8，这些方言脚本对部署无用；
+# 且内含芋道开源仓库公开的示例云存储/短信密钥（备注均为「示例」「请换成你自己的密钥」），
+# 会触发 GitHub 推送保护，故排除。
+saas-full/backend/sql/oracle/
+saas-full/backend/sql/postgresql/
+saas-full/backend/sql/sqlserver/
+saas-full/backend/sql/highgo/
+saas-full/backend/sql/kingbase/
+saas-full/backend/sql/opengauss/
+saas-full/backend/sql/dm/
+saas-full/backend/sql/db2/
+saas-full/backend/sql/mysql/ruoyi-vue-pro.sql
+
+# 历史增量迁移脚本（同含上述示例密钥；建库请用 deploy/db-init/ 整库快照）
+saas-full/deploy/db-migrate/ruoyi-vue-pro-live.sql

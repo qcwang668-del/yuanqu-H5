@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>智远力企 SaaS · 系统说明书 v1.0</title>
+<style>
+  :root{--bg:#f5f7fa;--card:#fff;--pri:#2563eb;--pri2:#1e40af;--txt:#1f2937;--sub:#6b7280;--bd:#e5e7eb;--ok:#16a34a;--warn:#d97706;--code:#f3f4f6}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.7;font-size:15px}
+  .wrap{max-width:960px;margin:0 auto;padding:24px 16px 80px}
+  header{background:linear-gradient(135deg,#1e40af,#3b82f6);color:#fff;border-radius:16px;padding:32px 28px;box-shadow:0 8px 24px rgba(37,99,235,.25)}
+  header h1{margin:0 0 8px;font-size:26px}
+  header .meta{opacity:.92;font-size:13px}
+  header .badges{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+  .badge{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);padding:4px 12px;border-radius:999px;font-size:12px}
+  section{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:22px 24px;margin-top:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+  h2{font-size:19px;margin:0 0 14px;padding-left:12px;border-left:4px solid var(--pri);color:var(--pri2)}
+  h3{font-size:16px;margin:20px 0 8px;color:var(--pri2)}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px}
+  th,td{border:1px solid var(--bd);padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:#eff6ff;color:var(--pri2);font-weight:600;white-space:nowrap}
+  tr:nth-child(even) td{background:#fafbfc}
+  code{background:var(--code);padding:2px 6px;border-radius:5px;font-family:"SFMono-Regular",Consolas,monospace;font-size:13px;color:#b91c1c}
+  pre{background:#1e293b;color:#e2e8f0;padding:14px 16px;border-radius:10px;overflow-x:auto;font-size:13px;line-height:1.6}
+  pre code{background:none;color:inherit;padding:0}
+  ul,ol{padding-left:22px;margin:8px 0}
+  li{margin:4px 0}
+  .tip{background:#fffbeb;border-left:4px solid var(--warn);padding:10px 14px;border-radius:6px;margin:10px 0;font-size:14px}
+  .ok{color:var(--ok);font-weight:600}
+  a{color:var(--pri);text-decoration:none}
+  a:hover{text-decoration:underline}
+  footer{text-align:center;color:var(--sub);font-size:12px;margin-top:30px}
+  .kpi{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
+  .kpi div{flex:1;min-width:130px;background:#eff6ff;border-radius:10px;padding:12px;text-align:center}
+  .kpi b{display:block;font-size:20px;color:var(--pri2)}
+  .kpi span{font-size:12px;color:var(--sub)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>智远力企 SaaS · 系统说明书</h1>
+  <div class="meta">版本 v1.0 ｜ 编制日期 2026-08-26 ｜ 目标系统：力企云 SAAS 系统（1:1 复刻）</div>
+  <div class="badges">
+    <span class="badge">芋道 ruoyi-vue-pro 二开</span>
+    <span class="badge">Spring Boot 2.7 / JDK8</span>
+    <span class="badge">Vue3 + Element Plus</span>
+    <span class="badge">多租户 SaaS</span>
+    <span class="badge ">9 模块 + 招商/园区扩展</span>
+  </div>
+</header>
+
+<section>
+  <h2>1. 系统概述</h2>
+  <p>智远力企 SaaS 是对已上线「<b>力企云 SAAS 系统</b>」（admin-saas.liqicloud.com）的 <b>1:1 功能复刻</b>，以开源框架为底座还原目标系统面向「租户管理员」的全部业务，形成一套可私有化部署的同款系统。</p>
+  <div class="kpi">
+    <div><b>6</b><span>实启用后端模块</span></div>
+    <div><b>9+</b><span>业务页面(复刻)</span></div>
+    <div><b>11</b><span>liqi_* 业务表</span></div>
+    <div><b>101</b><span>目标勘察租户 tenant-id</span></div>
+  </div>
+  <table>
+    <tr><th>项</th><th>结论</th></tr>
+    <tr><td>底座框架</td><td>芋道 ruoyi-vue-pro（SaaS 多租户版）二次开发，<code>revision 2026.07-jdk8-SNAPSHOT</code>，JDK8 / Spring Boot 2.7.18。包名 <code>cn.iocoder.yudao.module.liqi</code></td></tr>
+    <tr><td>架构风格</td><td>前后端分离 + 多模块 Maven 单体后端 + 多租户 SaaS</td></tr>
+    <tr><td>后端</td><td>Spring Boot 2.7.18 + MyBatis-Plus + Druid + 动态数据源 + MySQL 8 + Redis 7，统一响应 <code>{code,data,msg}</code>（code=0 成功）</td></tr>
+    <tr><td>前端</td><td>Vue 3.5 + TypeScript + Element Plus 2.13 + Pinia 3 + Vue Router + Vite 8（yudao-ui-admin-vue3，pnpm）</td></tr>
+    <tr><td>API 前缀</td><td><code>/admin-api</code>；本项目业务 <code>/admin-api/liqi/*</code></td></tr>
+    <tr><td>多租户</td><td>已开启。目标勘察租户「深圳市大疆无人机应用有限公司」→ tenant-id=101；本地底座默认租户 id=1</td></tr>
+  </table>
+  <div class="tip">⚠️ 根目录 <code>README.md</code> 所写「Spring Boot 3.2 + Java 17 + com.zhiyuanliqi.saas」为早期占位文案，<b>与实际代码不符</b>，一切以本说明书与实际文件为准。</div>
+</section>
+
+<section>
+  <h2>2. 技术栈与依赖</h2>
+  <h3>2.1 后端</h3>
+  <ul>
+    <li>Java 8 + Spring Boot 2.7.18 + 芋道 yudao 全家桶；MyBatis-Plus + MySQL 8 + Redis 7；Maven 多模块。</li>
+    <li><b>实际启用编译仅 6 个模块</b>：<code>yudao-dependencies / framework / server / module-system / module-infra / module-liqi</code>。磁盘上的 crm/erp/mall/hrm/wms/mes/iot/ai/bpm/pay 等均在 pom 注释、未构建。</li>
+    <li><b>核心业务模块 <code>yudao-module-liqi</code></b>：承载全部力企业务（81 个 Java 文件）。</li>
+    <li>多租户已开启（<code>yudao.tenant.enable=true</code>）；aj-captcha 滑块验证码、Quartz 定时、springdoc+knife4j 文档、字段加密。</li>
+  </ul>
+  <h3>2.2 前端</h3>
+  <ul>
+    <li>Vue 3.5.34 + Element Plus 2.13.7 + Pinia 3 + Axios 1.16 + Vite 8.1.4（version 2026.07-snapshot）。</li>
+    <li>业务页面 <code>frontend/src/views/{platformManage, enterpriseManage, investment, park, importExport, system/website}</code>；接口封装 <code>src/api/liqi/*</code>。</li>
+  </ul>
+  <h3>2.3 中间件与端口（GPU 运行环境实际值）</h3>
+  <table>
+    <tr><th>组件</th><th>地址/端口</th><th>说明</th></tr>
+    <tr><td>后端服务</td><td>127.0.0.1:48080</td><td>yudao-server.jar --spring.profiles.active=local</td></tr>
+    <tr><td>前端服务</td><td>0.0.0.0:5180</td><td>Vite preview 伺服 dist/（预构建产物，非 dev-server）</td></tr>
+    <tr><td>MySQL</td><td>127.0.0.1:3316</td><td>docker liqi-mysql，库 ruoyi-vue-pro，utf8mb4</td></tr>
+    <tr><td>Redis</td><td>127.0.0.1:6399</td><td>docker liqi-redis，db 0</td></tr>
+    <tr><td>稳定外网入口</td><td><a href="http://120.79.142.141:8000/">120.79.142.141:8000</a></td><td>卫星 socat ← GPU 反向隧道 ssh -R 18090:localhost:5180</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>3. 部署架构与运行环境</h2>
+  <h3>3.1 运行落点：GPU 服务器（唯一真相源）</h3>
+  <p>工作容器与 GPU 服务器 <code>192.168.8.43</code>（双 RTX 5090）<b>挂载同一物理目录</b> <code>/home/fangnan/PycharmProjects/u667a-u8fdc-u529b-u4f01-saas</code>，容器改代码 = GPU 即时生效，禁止 scp/rsync 二次拷贝。连接：sshpass 直连 root（<code>scripts/gpu_ssh.sh</code>）。</p>
+  <h3>3.2 卫星服务栈（120.79.142.141）</h3>
+  <table>
+    <tr><th>服务</th><th>端口</th><th>用途</th></tr>
+    <tr><td>MySQL 8</td><td>3306</td><td>卫星业务库</td></tr>
+    <tr><td>Redis 7</td><td>6379</td><td>缓存/会话</td></tr>
+    <tr><td>MinIO</td><td>9000/9001</td><td>对象存储，独立桶 <code>liqi-attachments</code></td></tr>
+    <tr><td>Nginx</td><td>80</td><td>网关，直链 http://120.79.142.141/liqi-attachments/&lt;key&gt;</td></tr>
+  </table>
+  <h3>3.3 外网访问链路</h3>
+  <p>用户 → 卫星 :8000（socat 0.0.0.0:8000→127.0.0.1:18090）→ GPU 反向隧道（ssh -R 18090:localhost:5180）→ 前端 5180 → /admin-api 代理 → 后端 48080。守护脚本 <code>scripts/liqi-tunnel-keeper.sh</code>（断线自动重连）。</p>
+  <div class="tip"><span class="ok">交付铁律：</span>只有对外地址 <a href="http://120.79.142.141:8000/">http://120.79.142.141:8000/</a> 能真实打开（HTTP 200 + 命中 &lt;title&gt;力企云SAAS系统&lt;/title&gt; + 入口 JS 200）才算「开发完成」。<b>本次交付已现场复测通过。</b></div>
+</section>
+
+<section>
+  <h2>4. 业务功能模块</h2>
+  <h3>4.1 复刻页面（4 顶层目录 + 9 业务页面）</h3>
+  <table>
+    <tr><th>#</th><th>顶层目录</th><th>子模块</th><th>后端接口前缀</th><th>数据表</th></tr>
+    <tr><td>1</td><td rowspan="4">平台管理</td><td>用户管理</td><td>/liqi/app-user</td><td>liqi_app_user</td></tr>
+    <tr><td>2</td><td>预留信息管理</td><td>/liqi/reserve-info</td><td>liqi_reserve_info</td></tr>
+    <tr><td>3</td><td>匹配线索管理</td><td>/liqi/match-clue</td><td>liqi_match_clue</td></tr>
+    <tr><td>4</td><td>评分线索管理</td><td>/liqi/scoring-clue</td><td>liqi_scoring_clue</td></tr>
+    <tr><td>5</td><td rowspan="3">企业管理</td><td>会员管理系统</td><td>/liqi/member</td><td>liqi_member</td></tr>
+    <tr><td>6</td><td>会员线索管理</td><td>/liqi/member-clue</td><td>liqi_member_clue</td></tr>
+    <tr><td>7</td><td>企业获批动态</td><td>/liqi/approval-dynamic</td><td>liqi_approval_dynamic</td></tr>
+    <tr><td>8</td><td>我的导入导出</td><td>导入导出中心</td><td>/liqi/import-export</td><td>liqi_import_export_record</td></tr>
+    <tr><td>9</td><td>系统管理</td><td>网站配置</td><td>/liqi/website-config</td><td>liqi_website_config</td></tr>
+  </table>
+  <p>要点：用户管理含详情页（基本信息+维护企业+登录日志）与推广用户列表；会员管理扩展「关联园区」筛选（<code>liqi_park</code>，按园区 address_keyword 对会员 register_address 做 LIKE）；导入导出是目标系统唯一具按钮级权限的模块。菜单精简仅留「首页/平台管理/企业管理/我的导入导出/系统管理」，admin 昵称定制「王雁」。</p>
+
+  <h3>4.2 定制扩展模块（复刻之外新增，前端已落地）</h3>
+  <table>
+    <tr><th>业务域</th><th>前端页面</th><th>支撑接口/数据</th></tr>
+    <tr><td><b>招商</b></td><td>榜单招商 / 地图招商(Leaflet) / 产业链招商 / 外呼工作台</td><td>liqi_enterprise 企业库 + 天眼查回填</td></tr>
+    <tr><td><b>园区管理</b></td><td>园区企业列表 / 可视化大屏</td><td>liqi_park + /liqi/park、liqi_enterprise</td></tr>
+  </table>
+  <p>菜单 SQL 见 <code>backend/sql/liqi/{investment-menu, map-invest-menu, chain-invest-menu, park-screen-menu}.sql</code>。后端复用企业库（LiqiEnterpriseController）与园区（LiqiParkController）接口，未单独建包。企业库 <code>liqi_enterprise</code> 约 5000 家（虚构名，天眼查查不到）+ 股东子表 <code>liqi_enterprise_shareholder</code>；天眼查已封装 <code>TycClient</code>。</p>
+</section>
+
+<section>
+  <h2>5. 代码结构</h2>
+  <h3>5.1 后端模块 yudao-module-liqi（包 cn.iocoder.yudao.module.liqi）</h3>
+  <pre><code>controller/admin/{appuser, reserveinfo, matchclue, scoringclue, member,
+                  memberclue, enterprise, park}/*Controller.java
+service/{...}/                ← Service + ServiceImpl
+dal/{dataobject, mysql}/      ← DO 实体 + Mapper
+importexport/ approval/ website/  ← 三个独立子包(含各自 controller/service/dal)
+enums/</code></pre>
+  <p>接口清单：app-user / reserve-info / match-clue / scoring-clue / member / member-clue / approval-dynamic / import-export / website-config / park / enterprise。</p>
+  <h3>5.2 数据库表（liqi_*，均带 tenant_id，utf8mb4）</h3>
+  <p>业务 9 表 + 扩展 <code>liqi_park</code> + 企业库 <code>liqi_enterprise</code> / <code>liqi_enterprise_shareholder</code>；芋道基础表约 48~59 张（<code>backend/sql/mysql/ruoyi-vue-pro.sql</code>）。DDL 见 <code>docs/reverse/ddl/</code>。</p>
+</section>
+
+<section>
+  <h2>6. 构建、启动与运维（GPU 服务器上执行）</h2>
+  <h3>6.1 后端</h3>
+  <pre><code># 重建 server jar（关键坑：必须先删旧 jar，否则新模块打不进去）
+rm -f backend/yudao-server/target/yudao-server.jar*
+JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 mvn -o -pl yudao-server package
+# 启动（端口 48080，约 8s 起来）
+java -jar backend/yudao-server/target/yudao-server.jar --spring.profiles.active=local</code></pre>
+  <h3>6.2 前端（改 .vue 必须重 build，preview 只伺服 dist）</h3>
+  <pre><code>cd frontend &amp;&amp; node --max_old_space_size=8192 ./node_modules/vite/bin/vite.js build --mode env.local</code></pre>
+  <h3>6.3 中文 SQL 导入（编码坑）</h3>
+  <pre><code>docker exec -i liqi-mysql mysql --default-character-set=utf8mb4 -uroot -pliqisaas123 ruoyi-vue-pro &lt; x.sql</code></pre>
+  <h3>6.4 运维规范（详见 CLAUDE.md）</h3>
+  <ul>
+    <li>进程托管单一化（supervisor / start.sh flock 互斥），精确端口清理，禁止宽匹配 pkill。</li>
+    <li>看门狗分家：业务健康只探本机回环 /healthz；cpolar/隧道看门狗只探隧道。</li>
+    <li>单一事实源文件并发改动走「拿锁→读盘→改→写→解锁」。</li>
+  </ul>
+</section>
+
+<section>
+  <h2>7. 测试与验收</h2>
+  <p><b>E2E 验收三件套（强制）</b>：测试用例 <code>e2e/tests/*.spec.ts</code> + 截图证据 <code>e2e/evidence/</code>（≥3 张）+ HTML 报告 <code>e2e/reports/*.html</code>（全绿）。部署后必须真实浏览器登录逐页截图并<b>逐张识图</b>确认成功页面。</p>
+  <p><b>测试账号</b>：本地底座 <code>admin / admin123</code>（租户 1，验证码已关）；同栈默认业务账号 <code>18888888888 / Qc@123456</code>（以实际为准）。</p>
+</section>
+
+<section>
+  <h2>8. 关键约束与已知坑</h2>
+  <ol>
+    <li>同一挂载唯一真相源，禁止二次拷贝文件。</li>
+    <li>重建 jar 必须先删旧 jar（<code>unzip -l</code> 验证新类已打进）。</li>
+    <li>前端改源码必须重 build（preview 只伺服 dist）。</li>
+    <li>中文 SQL 导入加 <code>--default-character-set=utf8mb4</code>。</li>
+    <li>交付以外网地址真实可达为准（HTTP 200 + 真应用 + 入口 JS）。</li>
+    <li>免费隧道（loca.lt/pinggy/cloudflared）本环境不可用于给用户看。</li>
+    <li>liqi_enterprise 为虚构企业名，天眼查查不到；天眼查仅认工商全称/统一社会信用代码。</li>
+    <li>扫码登录需人工介入：遇 QR 登录先发钉钉通知再停下等待用户扫码。</li>
+  </ol>
+</section>
+
+<footer>本网页由 AI 自动生成 · 智远力企 SaaS 系统说明书 v1.0 · 2026-08-26 · 托管于 MinIO(liqi-attachments) 经 Nginx 网关直链</footer>
+</div>
+</body>
+</html>

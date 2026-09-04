@@ -1,0 +1,87 @@
+# 依赖
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+/dist/
+/build/
+# 注意：build/dist 规则锚定根目录，避免误伤 frontend/build(Vite 构建配置源码)、
+# frontend/src/views/.../build(页面源码) 等源码目录；各子项目产物由其自身 .gitignore 管理
+*.whl
+
+# 环境变量（锚定根目录：根 .env 含真实密钥须忽略；frontend/.env 为前端公开构建配置，需入库）
+/.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 操作系统
+.DS_Store
+Thumbs.db
+
+# 日志
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 测试
+coverage/
+.nyc_output/
+test-results/
+playwright-report/
+e2e/reports/
+e2e/evidence/
+
+# 临时文件
+tmp/
+temp/
+*.tmp
+.mount_probe.txt
+
+# 数据库
+*.db
+*.sqlite
+*.sqlite3
+
+# 密钥和证书
+*.key
+*.pem
+*.crt
+*.p12
+
+# 构建产物
+*.tgz
+*.zip
+*.tar.gz
+
+# Java / Maven
+target/
+*.class
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/timing.properties
+
+# MK 二开（体积大/含凭据，可随时重拉，不入库）
+skills/mk-dev-suite/
+docs/mk/mk-dev-suite-index.md
+docs/ops/mk-env.md
+
+# 启程智远配套方案 · 卫星服务/GPU 凭据与私钥，切勿提交（保留 *.example 与 *.pub）
+deploy/secrets/*
+!deploy/secrets/*.example
+!deploy/secrets/*.pub
+!deploy/secrets/README.md
+deploy/.env
+# 钉钉加签机器人凭据（若为本项目另建加签机器人时用）
+scripts/dingtalk.env

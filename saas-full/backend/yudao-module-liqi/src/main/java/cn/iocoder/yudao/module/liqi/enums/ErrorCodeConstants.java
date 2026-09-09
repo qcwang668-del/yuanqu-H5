@@ -13,6 +13,7 @@ public interface ErrorCodeConstants {
     ErrorCode DAAS_INVOKE_FAILURE = new ErrorCode(1_099_002_001, "DaaS 企业数据接口调用失败：{}");
     ErrorCode DAAS_ENTITY_ID_BLANK = new ErrorCode(1_099_002_002, "企业标识 entityId 不能为空");
     ErrorCode DAAS_KEYWORD_BLANK = new ErrorCode(1_099_002_003, "查询关键词 keyword 不能为空");
+    ErrorCode DAAS_POLICY_ID_BLANK = new ErrorCode(1_099_002_004, "政策 ID 不能为空");
 
     // ========== 园区政策库 1-099-003-000 ==========
     ErrorCode POLICY_NOT_EXISTS = new ErrorCode(1_099_003_001, "园区政策不存在或已删除");

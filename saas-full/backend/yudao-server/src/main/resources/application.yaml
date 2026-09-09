@@ -230,6 +230,22 @@ bigmodel:
   base-url: ${BIGMODEL_BASE_URL:http://8.135.67.165:8000}
   timeout-ms: 120000      # 同步大模型任务较慢（实测约 40~60s）
 
+# 力企云 - H5 端政策数据源（DaaS 政策库 policy-list / policy-detail）
+# remote-enabled=true 时启用真实政策，覆盖内置 MockPolicyProvider；城市默认深圳市 440300。
+# 平台限流实测约 10 次/分钟（超限返回 400，冷却约 90s），故由本地快照承担分页与关键词筛选。
+liqi:
+  policy:
+    remote-enabled: ${LIQI_POLICY_REMOTE_ENABLED:true}
+    province-code: ${LIQI_POLICY_PROVINCE:440000}   # 广东省
+    city-code: ${LIQI_POLICY_CITY:440300}           # 深圳市（H5 端固定城市入参）
+    area-code: ${LIQI_POLICY_AREA:}                 # 区县编码，留空=全市
+    full-load-enabled: true                         # 后台补全全量政策（深圳约 1884 条 / 38 页）
+    request-interval-ms: 6500                       # 远程调用间隔，规避 10 次/分钟限流
+    max-pages: 0                                    # 全量加载页数上限，0=不限制
+    list-cache-minutes: 30                          # 列表快照缓存时长
+    detail-cache-hours: 24                          # 详情缓存时长
+    cooldown-seconds: 90                            # 远程失败后的冷却时间，避免打穿限流
+
 yudao:
   ai:
     gemini: # 谷歌 Gemini

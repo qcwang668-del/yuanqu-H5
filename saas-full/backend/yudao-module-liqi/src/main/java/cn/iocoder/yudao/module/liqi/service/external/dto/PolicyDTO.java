@@ -50,9 +50,32 @@ public class PolicyDTO {
     private String summary;
     /** 政策正文（详情接口返回，列表可为 null） */
     private String content;
-    /** 附件名称列表 */
+    /** 附件名称列表（兼容既有前端；园区政策沿用） */
     private List<String> attachments;
+    /**
+     * 附件明细（名称 + 可下载 URL）。
+     *
+     * <p>外部政策（DaaS）详情返回 {@code fileVoList}，含文件名与 OSS 直链，
+     * 仅靠 {@link #attachments} 的名称无法下载，故补充本字段供前端渲染下载链接。</p>
+     */
+    private List<PolicyFile> attachmentFiles;
     /** 外部原文链接 */
     private String sourceUrl;
+
+    /** 政策附件 */
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PolicyFile {
+
+        /** 文件名，如「附件1：申报表.pdf」 */
+        private String fileName;
+        /** 文件下载地址（外部 OSS 直链） */
+        private String fileUrl;
+        /** 文件类型，如 pdf/docx */
+        private String fileType;
+
+    }
 
 }

@@ -1,11 +1,11 @@
-/* 本地开发服务器：静态托管 H5 + 同源反代 /app-api -> 后端 48081 */
+/* 本地开发服务器：静态托管 H5 + 同源反代 /app-api -> 后端 48080（芋道 yudao-server 默认端口） */
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
 const ROOT = __dirname;
 const PORT = Number(process.env.PORT || 5173);
-const API_TARGET = process.env.API_TARGET || 'http://127.0.0.1:48081';
+const API_TARGET = process.env.API_TARGET || 'http://127.0.0.1:48080';
 const target = new URL(API_TARGET);
 
 const MIME = {
@@ -43,7 +43,7 @@ const server = http.createServer((req, res) => {
       res.writeHead(502, { 'Content-Type': 'application/json; charset=utf-8' });
       res.end(JSON.stringify({
         code: 502,
-        msg: '后端 app-api 未启动（需要 liqi-saas 全栈包的后端，端口 48081）'
+        msg: '后端 app-api 未启动（需要 liqi-saas 全栈包的后端，端口 48080）'
       }));
     });
     req.pipe(proxy);

@@ -1,4 +1,4 @@
-﻿<#
+<#
   惠企政策 H5（新版零构建单页）本地一键启动
   用法: powershell -ExecutionPolicy Bypass -File start-h5.ps1
 
@@ -65,6 +65,7 @@ if (Test-Port 5273) {
     Write-Host '[4/4] H5      5273  OK（已在运行）' -ForegroundColor Green
 } else {
     $env:PORT = '5273'
+    $env:API_TARGET = 'http://127.0.0.1:48081'
     Start-Process -FilePath $NodeExe -ArgumentList "`"$H5Dir\dev-server.js`"" `
         -WorkingDirectory $H5Dir -WindowStyle Hidden `
         -RedirectStandardOutput (Join-Path $LogDir 'h5.log') `

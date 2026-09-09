@@ -5,7 +5,7 @@ import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.module.liqi.controller.app.vo.AppPolicyAiMatchReqVO;
 import cn.iocoder.yudao.module.liqi.service.app.AppPolicyService;
 import cn.iocoder.yudao.module.liqi.service.app.AppUserBizService;
-import cn.iocoder.yudao.module.liqi.service.bigmodel.PolicyMatchClient;
+import cn.iocoder.yudao.module.liqi.service.bigmodel.ArkPolicyMatchService;
 import cn.iocoder.yudao.module.liqi.service.external.dto.PolicyDTO;
 import cn.iocoder.yudao.module.liqi.service.external.dto.PolicyQuery;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,7 +39,7 @@ public class AppPolicyController {
     @Resource
     private AppUserBizService userBizService;
     @Resource
-    private PolicyMatchClient policyMatchClient;
+    private ArkPolicyMatchService arkPolicyMatchService;
 
     @GetMapping("/page")
     @Operation(summary = "政策分页列表（类型/关键词/地区/行业/分类筛选）")
@@ -67,10 +67,10 @@ public class AppPolicyController {
     }
 
     @PostMapping("/ai-match")
-    @Operation(summary = "企业政策智能匹配（输入企业名，实时调大模型，约 40~60s 返回可申报政策 + 5 维打分）")
+    @Operation(summary = "企业政策智能匹配（输入企业名，AI 大模型评估本地政策库，返回可申报政策 + 5 维打分）")
     @PermitAll
     public CommonResult<Map<String, Object>> aiMatchPolicy(@Valid @RequestBody AppPolicyAiMatchReqVO reqVO) {
-        Map<String, Object> result = policyMatchClient.companyPolicyMatch(
+        Map<String, Object> result = arkPolicyMatchService.companyPolicyMatch(
                 reqVO.getCompanyName(), reqVO.getRevenue(), reqVO.getStaffNum());
         return success(result);
     }

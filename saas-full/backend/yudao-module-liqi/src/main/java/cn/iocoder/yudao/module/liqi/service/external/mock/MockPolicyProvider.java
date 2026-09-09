@@ -6,7 +6,7 @@ import cn.iocoder.yudao.module.liqi.service.external.PolicyProvider;
 import cn.iocoder.yudao.module.liqi.service.external.dto.EnterpriseSnapshot;
 import cn.iocoder.yudao.module.liqi.service.external.dto.PolicyDTO;
 import cn.iocoder.yudao.module.liqi.service.external.dto.PolicyQuery;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +26,9 @@ import java.util.stream.Collectors;
  */
 @Component
 @Profile("!prod")
-@ConditionalOnMissingBean(name = "remotePolicyProvider")
+// 与 RemotePolicyProvider 互斥：仅当未启用真实政策数据源（liqi.policy.remote-enabled 缺省或 false）时生效。
+// 注：@ConditionalOnMissingBean 对普通 @Component 的生效时机依赖扫描顺序，故改用配置开关判定。
+@ConditionalOnProperty(prefix = "liqi.policy", name = "remote-enabled", havingValue = "false", matchIfMissing = true)
 public class MockPolicyProvider implements PolicyProvider {
 
     private final List<PolicyDTO> store = new ArrayList<>();

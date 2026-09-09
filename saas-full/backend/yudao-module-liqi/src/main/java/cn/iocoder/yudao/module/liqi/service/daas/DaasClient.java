@@ -21,6 +21,7 @@ import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionU
 import static cn.iocoder.yudao.module.liqi.enums.ErrorCodeConstants.DAAS_ENTITY_ID_BLANK;
 import static cn.iocoder.yudao.module.liqi.enums.ErrorCodeConstants.DAAS_INVOKE_FAILURE;
 import static cn.iocoder.yudao.module.liqi.enums.ErrorCodeConstants.DAAS_KEYWORD_BLANK;
+import static cn.iocoder.yudao.module.liqi.enums.ErrorCodeConstants.DAAS_POLICY_ID_BLANK;
 
 /**
  * 力企云 DaaS 企业数据平台客户端。
@@ -45,6 +46,18 @@ public class DaasClient {
     private static final String PATH_BASE_INFO = "/api/business/qiyedata/qiye-base-info";
     /** 企业模糊匹配（POST JSON） */
     private static final String PATH_FUZZY_MATCH = "/api/bizPolicydata/qiye-fuzzy-matching";
+    /** 政策列表（POST JSON） */
+    private static final String PATH_POLICY_LIST = "/api/bizPolicydata/policy-list";
+    /**
+     * 政策详情（GET，ID 拼在路径末尾）。
+     *
+     * <p>注意：平台文档写的是 {@code ?id=xxx} 查询参数形式，实测返回 {@code 400 请求参数不正确}，
+     * 真实可用形式为路径式 {@code /policy-detail/{id}}，故此处按路径式拼接。</p>
+     */
+    private static final String PATH_POLICY_DETAIL = "/api/bizPolicydata/policy-detail/";
+
+    /** 平台对 pageSize 的硬上限，超过返回「参数错误,pageSize不能超过50.」 */
+    public static final int POLICY_PAGE_SIZE_MAX = 50;
 
     @Resource
     private DaasProperties properties;
@@ -112,6 +125,69 @@ public class DaasClient {
         }
         JSONObject data = unwrap(text, "qiye-fuzzy-matching");
         return data == null ? null : toPlainMap(data);
+    }
+
+
+    /**
+     * 政策列表（分页）。
+     * 入参均为可选：不传地区则返回全国数据；years 需与 month 同时传才生效。
+     */
+    public Map<String, Object> policyList(String provinceCode, String cityCode, String areaCode,
+                                          Integer years, Integer month,
+                                          Integer pageNo, Integer pageSize) {
+        JSONObject body = new JSONObject();
+        putIfNotBlank(body, "provinceCode", provinceCode);
+        putIfNotBlank(body, "cityCode", cityCode);
+        putIfNotBlank(body, "areaCode", areaCode);
+        if (years != null && month != null) {
+            body.set("years", years);
+            body.set("month", month);
+        }
+        body.set("pageNo", pageNo == null || pageNo < 1 ? 1 : pageNo);
+        int size = pageSize == null || pageSize < 1 ? 10 : pageSize;
+        body.set("pageSize", Math.min(size, POLICY_PAGE_SIZE_MAX));
+        String text;
+        try {
+            HttpRequest request = HttpRequest.post(properties.getBaseUrl() + PATH_POLICY_LIST)
+                    .header("Content-Type", "application/json")
+                    .body(body.toString())
+                    .timeout(properties.getTimeoutPostMs());
+            signHeaders().forEach(request::header);
+            text = request.execute().body();
+        } catch (Exception e) {
+            log.warn("[DaasClient][policyList] 请求异常 province={} city={}", provinceCode, cityCode, e);
+            throw exception(DAAS_INVOKE_FAILURE, "网络异常：" + e.getMessage());
+        }
+        JSONObject data = unwrap(text, "policy-list");
+        return data == null ? null : toPlainMap(data);
+    }
+
+    /**
+     * 政策详情（含 originText 正文与 fileVoList 附件）。
+     */
+    public Map<String, Object> policyDetail(String id) {
+        if (StrUtil.isBlank(id)) {
+            throw exception(DAAS_POLICY_ID_BLANK);
+        }
+        String text;
+        try {
+            HttpRequest request = HttpRequest.get(properties.getBaseUrl() + PATH_POLICY_DETAIL + id.trim())
+                    .timeout(properties.getTimeoutGetMs());
+            signHeaders().forEach(request::header);
+            text = request.execute().body();
+        } catch (Exception e) {
+            log.warn("[DaasClient][policyDetail] 请求异常 id={}", id, e);
+            throw exception(DAAS_INVOKE_FAILURE, "网络异常：" + e.getMessage());
+        }
+        JSONObject data = unwrap(text, "policy-detail");
+        return data == null ? null : toPlainMap(data);
+    }
+
+    /** 非空才写入请求体，避免给平台传空串导致筛选异常 */
+    private static void putIfNotBlank(JSONObject body, String key, String value) {
+        if (StrUtil.isNotBlank(value)) {
+            body.set(key, value.trim());
+        }
     }
 
     // ============================== 内部方法 ==============================

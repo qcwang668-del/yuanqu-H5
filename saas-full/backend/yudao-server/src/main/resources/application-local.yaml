@@ -286,6 +286,18 @@ justauth:
 
 # 力企 - 智能体广场（JDK8 自建轻量对话 + MCP，凭据走环境变量注入，勿硬编码）
 liqi:
+  # H5 端政策数据源（DaaS 政策库）；城市固定深圳市 440300
+  policy:
+    remote-enabled: ${LIQI_POLICY_REMOTE_ENABLED:true}
+    province-code: ${LIQI_POLICY_PROVINCE:440000}
+    city-code: ${LIQI_POLICY_CITY:440300}
+    area-code: ${LIQI_POLICY_AREA:}
+    full-load-enabled: true
+    request-interval-ms: 6500
+    max-pages: 0
+    list-cache-minutes: 30
+    detail-cache-hours: 24
+    cooldown-seconds: 90
   agent:
     ark:
       base-url: ${LIQI_ARK_BASE_URL:https://ark.cn-beijing.volces.com/api/coding/v3}

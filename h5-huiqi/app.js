@@ -150,6 +150,37 @@
   function loading() { return '<div class="loading">加载中…</div>'; }
   function empty(txt) { return '<div class="empty"><span class="e-ico">📭</span>' + esc(txt || '暂无数据') + '</div>'; }
 
+  // 详情副标题：DaaS 政策无截止日期/倒计时字段，退化展示发布日期
+  function detailMeta(p) {
+    if (p.deadline) {
+      return '截止 ' + esc(p.deadline) + (p.remainDays != null ? ' · 剩余 ' + p.remainDays + ' 天' : '');
+    }
+    return p.publishDate ? '发布日期 ' + esc(p.publishDate) : '长期有效';
+  }
+  // 附件区块：优先用 attachmentFiles（含可下载 URL），退化用 attachments（仅名称）
+  function attachBlock(p) {
+    var files = p.attachmentFiles || [];
+    if (files.length) {
+      var items = files.map(function (f) {
+        var ext = f.fileType || (String(f.fileName || '').split('.').pop() || '');
+        return '<a class="att-item" href="' + esc(f.fileUrl) + '" target="_blank" rel="noopener" download>' +
+          '<span class="att-ico">📎</span><span class="att-nm">' + esc(f.fileName) + '</span>' +
+          (ext ? '<span class="att-ext">' + esc(String(ext).toUpperCase()) + '</span>' : '') + '</a>';
+      }).join('');
+      return '<div class="body-card"><h4>附件下载（' + files.length + '）</h4><div class="att-list">' + items + '</div></div>';
+    }
+    var names = p.attachments || [];
+    if (!names.length) return '';
+    return '<div class="body-card"><h4>附件（' + names.length + '）</h4><div class="att-list">' +
+      names.map(function (n) { return '<div class="att-item att-plain"><span class="att-ico">📎</span><span class="att-nm">' + esc(n) + '</span></div>'; }).join('') +
+      '</div></div>';
+  }
+  // 原文链接：DaaS 当前 originUrl 多为空，非空才展示
+  function sourceBlock(p) {
+    if (!p.sourceUrl) return '';
+    return '<div class="body-card"><h4>政策原文</h4>' +
+      '<a class="src-link" href="' + esc(p.sourceUrl) + '" target="_blank" rel="noopener">查看发布方原文 ›</a></div>';
+  }
   // ---------- 页面渲染 ----------
   var RENDERERS = {};
 
@@ -228,7 +259,7 @@
       el.innerHTML =
         '<div class="detail-hero"><div class="src">来源：' + esc(p.parkName || p.publishOrg || '') + ' 发布</div>' +
           '<h2>' + esc(p.title) + '</h2>' +
-          '<div class="dmeta">' + (p.deadline ? '截止 ' + esc(p.deadline) + (p.remainDays != null ? ' · 剩余 ' + p.remainDays + ' 天' : '') : '长期有效') + '</div></div>' +
+          '<div class="dmeta">' + detailMeta(p) + '</div></div>' +
         '<div class="ai-box" id="ai-explain" onclick="explainPolicy(\'' + esc(p.id) + '\')"><div class="ai-ico">🤖</div>' +
           '<div class="ai-tx"><b>帮我读懂（说人话）</b><p>AI 把这条政策翻译成大白话，点我生成 ›</p></div></div>' +
         '<div class="ai-result" id="ai-result" style="display:none"></div>' +
@@ -236,6 +267,8 @@
           '<div class="kvi"><div class="v blue">' + esc(p.region || '—') + '</div><div class="k">所属地区</div></div>' +
           '<div class="kvi"><div class="v blue">' + esc(p.industry || '—') + '</div><div class="k">所属行业</div></div></div>' +
         '<div class="body-card"><h4>政策正文</h4><div class="ct">' + esc(p.content || p.summary || '（正文以发布方原文为准）') + '</div></div>' +
+        attachBlock(p) +
+        sourceBlock(p) +
         '<div style="display:flex;gap:10px;margin-top:16px">' +
           '<button class="btn ghost" style="flex:1" id="fav-btn" onclick="toggleFav(\'' + esc(p.id) + '\')">' + (d.favorited ? '★ 已收藏' : '☆ 收藏') + '</button>' +
           '<button class="btn orange" style="flex:1.4" onclick="location.hash=\'#/apply?policyId=' + esc(p.id) + '&title=' + encodeURIComponent(p.title) + '&type=' + esc(p.type) + '\'">立即申报</button>' +
